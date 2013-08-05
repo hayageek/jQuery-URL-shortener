@@ -1,0 +1,32 @@
+{
+"name": "urlshortener",
+"title": "jQuery URL Shortener",
+"description": "jQuery plugin for Shortening URLs using Google URL shortener API.",
+"keywords": [
+"urlshortener"
+],
+ "version": "0.1.0",
+ "author": {
+"name": "Ravishanker Kusuma",
+"url": "http://hayageek.com"
+},
+"maintainers": [
+{
+"name": "Ravishanker Kusuma",
+"email": "ravi@hayageek.com",
+"url": "http://hayageek.com"
+}
+],
+"licenses": [
+{
+"type": "MIT",
+"url": "https://github.com/hayageek/jQuery-URL-shortener/blob/master/MIT-License.txt"
+}
+],
+"homepage": "https://github.com/hayageek/jQuery-URL-shortener",
+"docs": "https://github.com/hayageek/jQuery-URL-shortener",
+"download": "https://github.com/hayageek/jQuery-URL-shortener",
+"dependencies": {
+"jquery": ">=1.6"
+}
+}
