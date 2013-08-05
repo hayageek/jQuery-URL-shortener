@@ -31,5 +31,4 @@ Projection types: FULL,ANALYTICS_CLICKS,ANALYTICS_TOP_STRINGS
 
 Tutorial
 ====================
-
-
+http://hayageek.com/jquery-url-shortener/
