@@ -26,6 +26,7 @@
 "homepage": "https://github.com/hayageek/jQuery-URL-shortener",
 "docs": "https://github.com/hayageek/jQuery-URL-shortener",
 "download": "https://github.com/hayageek/jQuery-URL-shortener",
+"demo": "http://hayageek.com/jquery-url-shortener/",
 "dependencies": {
 "jquery": ">=1.6"
 }
