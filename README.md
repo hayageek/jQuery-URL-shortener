@@ -12,6 +12,7 @@ jQuery.urlShortener.settings.apiKey='YOUR_API_KEY___________';
 
 ###Shorten a URL
 ---
+````javascript
 jQuery.urlShortener({
     longUrl: "http://hayageek.com/jquery-url-shortener/",
     success: function (shortUrl) {
@@ -22,10 +23,11 @@ jQuery.urlShortener({
     	alert(JSON.stringify(err));
     }
 });
-
+````
 
 ###Short URL to Long URL
 ---
+````javascript
 jQuery.urlShortener({
     shortUrl: shortUrlLink,
     success: function (longURL) {
@@ -36,10 +38,11 @@ jQuery.urlShortener({
     	alert(JSON.stringify(err));    
     }
 });
-
+````
 
 ###Get Short URL information (Analytics,Clicks)
 ---
+````javascript
 jQuery.urlShortener({
     shortUrl: shortUrlLink,
     projection: "FULL",
@@ -51,7 +54,7 @@ jQuery.urlShortener({
     	alert(JSON.stringify(err));    	
     }
 });	
-
+````
 Projection types: FULL,ANALYTICS_CLICKS,ANALYTICS_TOP_STRINGS
 
 
