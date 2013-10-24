@@ -1,100 +1,92 @@
 /*!
-* jQuery URL Shortener v@VERSION
+* jQuery URL Shortener 1.0
 * https://github.com/hayageek/jQuery-URL-shortener
 *
-*
-* Date: @DATE
+* Date: 24-Oct-2013
 */
-(function($) {
+(function ($) {
+    var scriptsLoaded = false;
+    var clientLoaded = false;
 
-	$.urlShortener = function(options) 
-	{
-		var settings ={};
-		$.extend(settings,$.urlShortener.settings, options);
-		 
-		var requestUrl = settings.requestUrl;
-		
-		if(settings.apiKey.length > 1)
-		{
-			requestUrl += "key="+settings.apiKey;
-		}
-	
-		if(settings.longUrl != undefined)
-		{
-			var data = {longUrl: settings.longUrl};
-			var shortUrl=undefined;
-			
-			return $.urlShortener.shortUrl(requestUrl,data);
-		}
-		else if(settings.shortUrl != undefined) //URL info
-		{
-			requestUrl += "&shortUrl="+settings.shortUrl;
-			return $.urlShortener.urlInfo(requestUrl,settings.projection);
-		}
-		
-	
-		return undefined;
-	};
-	
-	$.urlShortener.shortUrl = function(requestUrl,data)
-	{
-		var shortUrl =undefined;
-		$.ajax({
-		async:false,
-		type: "POST",
-		url: requestUrl,
-		data: JSON.stringify(data),
-		contentType:"application/json; charset=utf-8",
-		dataType:"json",
-	  	}).done(function( info ) 
-		{
-			shortUrl=info.id;
-		}).fail(function(jqXHR, textStatus, errorThrown) 
-		{ 
-			
-		});
-		
-		return shortUrl;
-		
-	}
-	$.urlShortener.urlInfo = function(requestUrl,projection)
-	{
-		if(projection != undefined)
-		{
-			requestUrl += "&projection="+projection;
-		}
-		var urlInfo =undefined;
-		$.ajax({
-		async:false,
-		type: "GET",
-		url: requestUrl,
-		contentType:"application/json; charset=utf-8",
-		dataType:"json",
-	  	}).done(function( info ) 
-		{
-			if(projection == undefined)
-			{
-				urlInfo=info.longUrl; //return long URL;
-			}
-			else
-			{
-				urlInfo = info; //return full info;
-			}
-			
-		}).fail(function(jqXHR, textStatus, errorThrown) 
-		{ 
-			
-		});
-		
-		return urlInfo;
-		
-	}
+    $.getScript("https://apis.google.com/js/client.js", function () {
+        (function checkIfLoaded() {
+            if (gapi.client) {
+                scriptsLoaded = true;
+                gapi.client.setApiKey($.urlShortener.settings.apiKey);
+                gapi.client.load('urlshortener', $.urlShortener.settings.version, function () {
+                    clientLoaded = true;
+                });
+            } else window.setTimeout(checkIfLoaded, 10);
+        })();
+    });
 
-	$.urlShortener.settings = {
-		apiKey : '',
-		version : 'v1',
-		requestUrl : 'https://www.googleapis.com/urlshortener/v1/url?'
-	};
 
+    $.urlShortener = function (options) {
+
+        var settings = {};
+        var data = {};
+        $.extend(settings, $.urlShortener.settings, options);
+
+        (function checkScriptsAndClientLoaded() {
+            if (scriptsLoaded && clientLoaded) {
+                if (settings.longUrl != undefined) {
+                    longToShort(settings);
+                } else if (settings.shortUrl != undefined) //URL info
+                {
+                    shortUrlInfo(settings);
+                }
+            } else {
+                window.setTimeout(checkScriptsAndClientLoaded, 10);
+            }
+
+        })();
+
+        function longToShort(s) {
+            var data = {
+                'longUrl': s.longUrl
+            };
+            var request = gapi.client.urlshortener.url.insert({
+                'resource': data
+            });
+            request.execute(function (response) {
+                if (response.id != null) {
+                    if (s.success) {
+                        s.success.call(this, response.id);
+                    }
+                } else {
+                    if (s.error) {
+                        s.error.call(this, response.error);
+                    }
+                }
+            });
+        }
+
+        function shortUrlInfo(s) {
+            var data = {
+                'shortUrl': s.shortUrl,
+                'projection': s.projection
+            };
+            var request = gapi.client.urlshortener.url.get(data);
+            request.execute(function (response) {
+                if (response.longUrl != null) {
+                    if (s.success) {
+                        if (s.projection == undefined) s.success.call(this, response.longUrl);
+                        else s.success.call(this, response);
+                    }
+                } else {
+                    if (s.error) {
+                        s.error.call(this, response.error);
+                    }
+                }
+
+            });
+
+        }
+
+    }
+    $.urlShortener.settings = {
+        apiKey: '',
+        version: 'v1',
+    };
 
 }(jQuery));

@@ -1,0 +1,7 @@
+/*!
+* jQuery URL Shortener 1.0
+* https://github.com/hayageek/jQuery-URL-shortener
+*
+* Date: 24-Oct-2013
+*/
+(function(c){var a=false;var b=false;c.getScript("https://apis.google.com/js/client.js",function(){(function d(){if(gapi.client){a=true;gapi.client.setApiKey(c.urlShortener.settings.apiKey);gapi.client.load("urlshortener",c.urlShortener.settings.version,function(){b=true})}else{window.setTimeout(d,10)}})()});c.urlShortener=function(d){var e={};var f={};c.extend(e,c.urlShortener.settings,d);(function h(){if(a&&b){if(e.longUrl!=undefined){i(e)}else{if(e.shortUrl!=undefined){g(e)}}}else{window.setTimeout(h,10)}})();function i(j){var l={longUrl:j.longUrl};var k=gapi.client.urlshortener.url.insert({resource:l});k.execute(function(m){if(m.id!=null){if(j.success){j.success.call(this,m.id)}}else{if(j.error){j.error.call(this,m.error)}}})}function g(j){var l={shortUrl:j.shortUrl,projection:j.projection};var k=gapi.client.urlshortener.url.get(l);k.execute(function(m){if(m.longUrl!=null){if(j.success){if(j.projection==undefined){j.success.call(this,m.longUrl)}else{j.success.call(this,m)}}}else{if(j.error){j.error.call(this,m.error)}}})}};c.urlShortener.settings={apiKey:"",version:"v1"}}(jQuery));
